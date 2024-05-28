@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-05-2024 a las 13:01:03
+-- Tiempo de generación: 28-05-2024 a las 16:31:22
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -38,13 +38,6 @@ CREATE TABLE `entradas` (
   `fecha_entrada` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `entradas`
---
-
-INSERT INTO `entradas` (`id`, `proveedor`, `referencia_entrada`, `articulo`, `cantidad`, `peso`, `lote`, `fecha_entrada`) VALUES
-(1, 'Huevos pariente', 'Alb-3589', 'Azucar la azucarera', 2, 1000.00, '7896582', '2024-05-28');
-
 -- --------------------------------------------------------
 
 --
@@ -62,17 +55,15 @@ CREATE TABLE `ingredientes_recetas` (
 --
 
 INSERT INTO `ingredientes_recetas` (`id`, `receta_id`, `nombre_ingrediente`) VALUES
-(1, 1, 'palmeras'),
-(2, 1, 'kinder'),
-(3, 1, 'chocolate con leche'),
-(4, 2, 'caracolas'),
-(5, 2, 'chcolate negro'),
-(6, 2, 'crocanti'),
-(7, 3, 'canolis'),
-(8, 3, 'lotus'),
-(9, 4, 'croisant'),
-(10, 4, 'crema lotus'),
-(11, 4, 'galleta lotus');
+(12, 5, 'palmeras'),
+(13, 5, 'crema kinder'),
+(14, 6, 'croissant'),
+(15, 6, 'croncantis'),
+(16, 7, 'canolis'),
+(17, 7, 'lotus'),
+(18, 8, 'Palmera'),
+(19, 8, 'Nutella'),
+(20, 8, 'Chocolate Negro');
 
 -- --------------------------------------------------------
 
@@ -92,15 +83,16 @@ CREATE TABLE `lotes_ingredientes_usados` (
 --
 
 INSERT INTO `lotes_ingredientes_usados` (`id`, `produccion_id`, `ingrediente_id`, `lote`) VALUES
-(1, 3, 4, '986532'),
-(2, 3, 5, '963'),
-(3, 3, 6, '258'),
-(4, 4, 1, '123456789'),
-(5, 4, 2, '65498731'),
-(6, 4, 3, '753951'),
-(7, 5, 4, '986532'),
-(8, 5, 5, '8794654321'),
-(9, 5, 6, '98765464');
+(13, 7, 12, '123456'),
+(14, 7, 13, '789654'),
+(15, 8, 16, '789654'),
+(16, 9, 14, '78569'),
+(17, 9, 15, '5875'),
+(18, 10, 18, '789654'),
+(19, 10, 19, '3241'),
+(20, 10, 20, '12564'),
+(21, 11, 16, '789654'),
+(22, 11, 17, '589637');
 
 -- --------------------------------------------------------
 
@@ -121,11 +113,11 @@ CREATE TABLE `produccion` (
 --
 
 INSERT INTO `produccion` (`id`, `receta_id`, `lote_produccion`, `fecha_produccion`, `cantidad`) VALUES
-(1, 1, '789456', '2024-05-28', 16),
-(2, 3, '789456', '2024-05-28', 12),
-(3, 2, '741', '2024-05-28', 25),
-(4, 1, '159753', '2024-05-28', 24),
-(5, 2, '898752465498', '2024-05-29', 32);
+(7, 5, '5487', '2024-05-29', 24),
+(8, 7, '654321', '2024-05-29', 32),
+(9, 6, '2369', '2024-05-29', 12),
+(10, 8, '8764321', '2024-05-29', 35),
+(11, 7, '4125', '2024-05-28', 34);
 
 -- --------------------------------------------------------
 
@@ -143,10 +135,10 @@ CREATE TABLE `recetas` (
 --
 
 INSERT INTO `recetas` (`id`, `nombre_producto_final`) VALUES
-(1, 'Palmera Kinder'),
-(2, 'caracolas'),
-(3, 'canolis lotus'),
-(4, 'croissant lotus');
+(5, 'Palmera Kinder'),
+(6, 'Croissant'),
+(7, 'canolis lotus'),
+(8, 'Palmera Nutella');
 
 -- --------------------------------------------------------
 
@@ -221,31 +213,31 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `entradas`
 --
 ALTER TABLE `entradas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `ingredientes_recetas`
 --
 ALTER TABLE `ingredientes_recetas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `lotes_ingredientes_usados`
 --
 ALTER TABLE `lotes_ingredientes_usados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `produccion`
 --
 ALTER TABLE `produccion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `recetas`
 --
 ALTER TABLE `recetas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`

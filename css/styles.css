@@ -1,3 +1,13 @@
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+@media (max-width: 768px) {
+    .filters {
+        flex-direction: column;
+    }
+}
 body {
     background-color: #3C0A1D; /* Color de fondo basado en la imagen proporcionada */
     color: #E9C6D0; /* Color de texto */
