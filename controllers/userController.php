@@ -2,6 +2,24 @@
 session_start();
 include '../config/config.php';
 
+// Manejo de inactividad de sesión
+$inactive = 900; // 15 minutos
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $inactive) {
+    session_unset();
+    session_destroy();
+    header("Location: ../views/index.php");
+    exit;
+}
+
+$_SESSION['last_activity'] = time();
+
+// Verificar si el usuario está logueado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../views/login.php");
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre_completo = $_POST['nombre_completo'];
     $usuario = $_POST['usuario'];

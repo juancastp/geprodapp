@@ -1,31 +1,27 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+session_start();
+
+// Manejo de inactividad de sesión
+$inactive = 900; // 15 minutos
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $inactive) {
+    session_unset();
+    session_destroy();
+    header("Location: index.php");
+    exit;
 }
-$loggedIn = isset($_SESSION['user_id']);
+
+$_SESSION['last_activity'] = time();
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="../css/styles.css">
-    <style>
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        @media (max-width: 768px) {
-            .filters {
-                flex-direction: column;
-            }
-        }
-    </style>
-    <title>Production Management</title>
+    <title>Gluttiere</title>
+    <link rel="icon" href="images/cupcake.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <?php include 'navbar.php'; ?>
-    <div class="container mt-4">
+    <?php include 'nav.php'; ?>

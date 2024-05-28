@@ -1,4 +1,18 @@
 <?php
+session_start();
+
+// Manejo de inactividad de sesión
+$inactive = 900; // 15 minutos
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $inactive) {
+    session_unset();
+    session_destroy();
+    header("Location: index.php");
+    exit;
+}
+
+$_SESSION['last_activity'] = time();
+
 $host = 'localhost';
 $db = 'gluttiere';
 $user = 'saglu';

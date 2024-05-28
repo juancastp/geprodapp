@@ -44,8 +44,8 @@ $usuarios = $stmt->fetchAll();
         <tbody>
             <?php foreach ($usuarios as $usuario): ?>
                 <tr>
-                    <td><?= $usuario['nombre_completo'] ?></td>
-                    <td><?= $usuario['usuario'] ?></td>
+                    <td><?= htmlspecialchars($usuario['nombre_completo']) ?></td>
+                    <td><?= htmlspecialchars($usuario['usuario']) ?></td>
                     <td>
                         <a href="../controllers/userController.php?action=edit&id=<?= $usuario['id'] ?>" class="btn btn-warning">Editar</a>
                         <a href="../controllers/userController.php?action=delete&id=<?= $usuario['id'] ?>" class="btn btn-danger">Eliminar</a>

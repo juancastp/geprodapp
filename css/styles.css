@@ -1,3 +1,4 @@
+/* Estilos para filtros */
 .filters {
     display: flex;
     flex-wrap: wrap;
@@ -8,11 +9,14 @@
         flex-direction: column;
     }
 }
+
+/* Estilos generales del cuerpo */
 body {
-    background-color: #3C0A1D; /* Color de fondo basado en la imagen proporcionada */
+    background-color: #3C0A1D; /* Color de fondo */
     color: #E9C6D0; /* Color de texto */
 }
 
+/* Estilos de la barra de navegación */
 .navbar {
     background-color: #500A1E; /* Color de la barra de navegación */
 }
@@ -21,6 +25,7 @@ body {
     color: #E9C6D0 !important; /* Color de los enlaces de la navegación */
 }
 
+/* Estilos de botones */
 .btn-primary {
     background-color: #7B1F33;
     border-color: #7B1F33;
@@ -61,6 +66,7 @@ body {
     border-color: #F7C24F;
 }
 
+/* Estilos de tablas */
 .table {
     background-color: #FFF;
     color: #3C0A1D;

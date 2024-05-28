@@ -25,8 +25,8 @@ include '../includes/header.php';
             <input type="text" class="form-control" id="nombre_producto_final" name="nombre_producto_final" required>
         </div>
         <div id="ingredientes">
-            <div class="form-group">
-                <label for="nombre_ingrediente">Ingrediente:</label>
+            <div class="form-group d-flex">
+                <label for="nombre_ingrediente" class="mr-2">Ingrediente:</label>
                 <input type="text" class="form-control" id="nombre_ingrediente" name="nombre_ingrediente[]">
                 <button type="button" class="btn btn-success ml-2" onclick="addIngredient()">+</button>
             </div>
@@ -47,14 +47,14 @@ include '../includes/header.php';
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong><?= $receta[0]['nombre_producto_final'] ?></strong></td>
+                            <td><strong><?= htmlspecialchars($receta[0]['nombre_producto_final']) ?></strong></td>
                             <td>
                                 <a href="../controllers/recetaController.php?action=delete&receta_id=<?= $receta_id ?>" class="btn btn-danger">Eliminar</a>
                             </td>
                         </tr>
                         <?php foreach ($receta as $ingrediente): ?>
                             <tr>
-                                <td>- <?= $ingrediente['nombre_ingrediente'] ?></td>
+                                <td>- <?= htmlspecialchars($ingrediente['nombre_ingrediente']) ?></td>
                                 <td>
                                     <a href="../controllers/recetaController.php?action=edit&ingrediente_id=<?= $ingrediente['ingrediente_id'] ?>" class="btn btn-warning">Editar</a>
                                     <a href="../controllers/recetaController.php?action=delete&ingrediente_id=<?= $ingrediente['ingrediente_id'] ?>" class="btn btn-danger">Eliminar</a>
@@ -74,8 +74,9 @@ include '../includes/header.php';
 <script>
 function addIngredient() {
     const div = document.createElement('div');
-    div.className = 'form-group';
+    div.className = 'form-group d-flex';
     div.innerHTML = `
+        <label class="mr-2">Ingrediente:</label>
         <input type="text" class="form-control" name="nombre_ingrediente[]">
         <button type="button" class="btn btn-success ml-2" onclick="addIngredient()">+</button>
     `;
