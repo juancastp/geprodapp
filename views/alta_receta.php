@@ -14,10 +14,6 @@ $stmt = $pdo->query("SELECT recetas.id as receta_id, recetas.nombre_producto_fin
                      ORDER BY recetas.id");
 $recetas_ingredientes = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 
-// Obtener todas las recetas para el filtro
-$stmt = $pdo->query("SELECT id, nombre_producto_final FROM recetas");
-$recetas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 include '../includes/header.php';
 ?>
 
@@ -29,32 +25,19 @@ include '../includes/header.php';
             <input type="text" class="form-control" id="nombre_producto_final" name="nombre_producto_final" required>
         </div>
         <div id="ingredientes">
-            <div class="form-group d-flex align-items-center">
+            <div class="form-group">
                 <label for="nombre_ingrediente">Ingrediente:</label>
                 <input type="text" class="form-control" id="nombre_ingrediente" name="nombre_ingrediente[]">
-                <button type="button" class="btn btn-success ml-2" onclick="addIngredient(this)">+</button>
+                <button type="button" class="btn btn-success ml-2" onclick="addIngredient()">+</button>
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Guardar</button>
     </form>
 
-    <h3 class="mt-5">Filtros</h3>
-    <form id="filter-form">
-        <div class="form-group">
-            <label for="filter_receta">Recetas:</label>
-            <select class="form-control" id="filter_receta" name="filter_receta">
-                <option value="">Todas las recetas</option>
-                <?php foreach ($recetas as $receta): ?>
-                    <option value="<?= $receta['id'] ?>"><?= $receta['nombre_producto_final'] ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </form>
-
     <h3 class="mt-5">Listado de Recetas</h3>
     <div class="row">
         <?php foreach ($recetas_ingredientes as $receta_id => $receta): ?>
-            <div class="col-md-6 mb-4 receta-item" data-receta-id="<?= $receta_id ?>">
+            <div class="col-md-6 mb-4">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -81,7 +64,6 @@ include '../includes/header.php';
                                 </td>
                             </tr>
                         <?php endforeach; ?>
-                        <tr id="receta_<?= $receta_id ?>"></tr>
                     </tbody>
                 </table>
             </div>
@@ -90,42 +72,28 @@ include '../includes/header.php';
 </div>
 
 <script>
-function addIngredient(button) {
+function addIngredient() {
     const div = document.createElement('div');
-    div.className = 'form-group d-flex align-items-center';
+    div.className = 'form-group';
     div.innerHTML = `
         <input type="text" class="form-control" name="nombre_ingrediente[]">
-        <button type="button" class="btn btn-success ml-2" onclick="addIngredient(this)">+</button>
+        <button type="button" class="btn btn-success ml-2" onclick="addIngredient()">+</button>
     `;
-    const parentDiv = button.parentNode;
-    parentDiv.parentNode.insertBefore(div, parentDiv.nextSibling);
-    button.remove();
+    document.getElementById('ingredientes').appendChild(div);
 }
 
 function addExistingIngredient(recetaId) {
-    const tr = document.getElementById('receta_' + recetaId);
-    const td = document.createElement('td');
-    td.colSpan = 2;
-    td.innerHTML = `
-        <form action="../controllers/recetaController.php" method="POST" class="d-flex align-items-center">
+    const div = document.createElement('div');
+    div.className = 'form-group';
+    div.innerHTML = `
+        <form action="../controllers/recetaController.php" method="POST">
             <input type="hidden" name="receta_id" value="${recetaId}">
             <input type="text" class="form-control" name="nombre_ingrediente">
             <button type="submit" class="btn btn-primary ml-2">Guardar</button>
         </form>
     `;
-    tr.appendChild(td);
+    document.getElementById('receta_' + recetaId).appendChild(div);
 }
-
-document.getElementById('filter_receta').addEventListener('change', function() {
-    const selectedReceta = this.value;
-    document.querySelectorAll('.receta-item').forEach(function(item) {
-        if (selectedReceta === '' || item.dataset.recetaId === selectedReceta) {
-            item.style.display = '';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-});
 </script>
 
 <?php include '../includes/footer.php'; ?>

@@ -7,38 +7,12 @@ if (!isset($_SESSION['user_id'])) {
 
 include '../config/config.php'; // Incluye la configuración de la base de datos
 
-// Obtener recetas para el desplegable
-$stmt = $pdo->query("SELECT * FROM recetas");
-$recetas = $stmt->fetchAll();
-
 include '../includes/header.php';
 ?>
 
 <div class="container">
-    <h2 class="mt-5">Producción</h2>
-    <form action="../controllers/produccionController.php" method="POST">
-        <div class="form-group">
-            <label for="receta_id">Receta:</label>
-            <select class="form-control" id="receta_id" name="receta_id" onchange="fetchIngredients(this.value)" required>
-                <option value="">Seleccione una receta</option>
-                <?php foreach ($recetas as $receta): ?>
-                    <option value="<?= $receta['id'] ?>"><?= $receta['nombre_producto_final'] ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div id="ingredientes"></div>
-        <div class="form-group">
-            <label for="lote_produccion">Lote de Producción:</label>
-            <input type="text" class="form-control" id="lote_produccion" name="lote_produccion" required>
-        </div>
-        <div class="form-group">
-            <label for="cantidad">Cantidad:</label>
-            <input type="number" class="form-control" id="cantidad" name="cantidad" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Registrar Producción</button>
-    </form>
-
-    <h3 class="mt-5">Listado de Productos Finales</h3>
+    <h2 class="mt-5">Listado de Producción</h2>
+    <h3 class="mt-3">Productos Finales</h3>
     <?php
     // Obtener todos los productos finales producidos, ordenados por fecha de producción
     $stmt = $pdo->query("SELECT produccion.*, recetas.nombre_producto_final FROM produccion JOIN recetas ON produccion.receta_id = recetas.id ORDER BY fecha_produccion DESC");
@@ -49,7 +23,7 @@ include '../includes/header.php';
                          FROM lotes_ingredientes_usados 
                          JOIN ingredientes_recetas ON lotes_ingredientes_usados.ingrediente_id = ingredientes_recetas.id");
     $lotes_ingredientes = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
-    
+
     // Debugging information
     echo "<script>console.log('lotes_ingredientes:', " . json_encode($lotes_ingredientes) . ");</script>";
 
@@ -104,35 +78,7 @@ include '../includes/header.php';
 
 <script>
 const lotes_ingredientes = <?= json_encode($lotes_ingredientes) ?>;
-
-function fetchIngredients(recetaId) {
-    console.log("fetchIngredients called with recetaId:", recetaId);
-    if (recetaId) {
-        fetch('../controllers/recetaController.php?action=getIngredients&receta_id=' + recetaId)
-        .then(response => response.json())
-        .then(data => {
-            console.log("Received data:", data);
-            const ingredientesDiv = document.getElementById('ingredientes');
-            ingredientesDiv.innerHTML = '';
-            if (data.error) {
-                console.error("Error:", data.error);
-            } else {
-                data.forEach(ingrediente => {
-                    const div = document.createElement('div');
-                    div.className = 'form-group';
-                    div.innerHTML = `
-                        <label for="lote_ingrediente_${ingrediente.id}">Lote de ${ingrediente.nombre_ingrediente}:</label>
-                        <input type="text" class="form-control" id="lote_ingrediente_${ingrediente.id}" name="lote_ingrediente[${ingrediente.id}]">
-                    `;
-                    ingredientesDiv.appendChild(div);
-                });
-            }
-        })
-        .catch(error => console.error('Error fetching ingredients:', error));
-    } else {
-        document.getElementById('ingredientes').innerHTML = '';
-    }
-}
+console.log('lotes_ingredientes:', lotes_ingredientes);
 
 function toggleIngredients(productId) {
     console.log("toggleIngredients called with productId:", productId);
@@ -141,8 +87,18 @@ function toggleIngredients(productId) {
         console.log("Showing ingredients for productId:", productId);
         console.log("ingredientesRow:", ingredientesRow);
         console.log("lotes_ingredientes:", lotes_ingredientes);
-        const ingredientes = lotes_ingredientes[productId];
+        const ingredientes = lotes_ingredientes[productId] || lotes_ingredientes[String(productId)];
         console.log("ingredientes for productId:", ingredientes);
+        if (ingredientes && ingredientes.length > 0) {
+            let list = '';
+            ingredientes.forEach(ingrediente => {
+                list += `<li class="list-group-item"><strong>${ingrediente.nombre_ingrediente}:</strong> ${ingrediente.lote}</li>`;
+            });
+            ingredientesRow.querySelector('.list-group').innerHTML = list;
+        } else {
+            console.log("No ingredientes found for productId:", productId);
+            ingredientesRow.querySelector('.list-group').innerHTML = '<li class="list-group-item">No hay ingredientes registrados</li>';
+        }
         ingredientesRow.style.display = '';
     } else {
         console.log("Hiding ingredients for productId:", productId);

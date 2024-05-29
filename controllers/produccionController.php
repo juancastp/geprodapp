@@ -24,12 +24,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Insertar lotes de ingredientes usados
         foreach ($lotes_ingredientes as $ingrediente_id => $lote) {
-            $stmt = $pdo->prepare("INSERT INTO lotes_ingredientes_usados (produccion_id, ingrediente_id, lote) VALUES (:produccion_id, :ingrediente_id, :lote)");
-            $stmt->execute([
-                'produccion_id' => $produccion_id,
-                'ingrediente_id' => $ingrediente_id,
-                'lote' => $lote
-            ]);
+            if (!empty($lote)) {
+                $stmt = $pdo->prepare("INSERT INTO lotes_ingredientes_usados (produccion_id, ingrediente_id, lote) VALUES (:produccion_id, :ingrediente_id, :lote)");
+                $stmt->execute([
+                    'produccion_id' => $produccion_id,
+                    'ingrediente_id' => $ingrediente_id,
+                    'lote' => $lote
+                ]);
+            }
         }
 
         header("Location: ../views/produccion.php");
