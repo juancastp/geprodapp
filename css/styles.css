@@ -1,0 +1,70 @@
+body {
+    background-color: #3C0A1D; /* Color de fondo basado en la imagen proporcionada */
+    color: #E9C6D0; /* Color de texto */
+}
+
+.navbar {
+    background-color: #500A1E; /* Color de la barra de navegación */
+}
+
+.navbar a {
+    color: #E9C6D0 !important; /* Color de los enlaces de la navegación */
+}
+
+.btn-primary {
+    background-color: #7B1F33;
+    border-color: #7B1F33;
+}
+
+.btn-primary:hover {
+    background-color: #9A2A4A;
+    border-color: #9A2A4A;
+}
+
+.btn-success {
+    background-color: #D39D38;
+    border-color: #D39D38;
+}
+
+.btn-success:hover {
+    background-color: #E6B554;
+    border-color: #E6B554;
+}
+
+.btn-danger {
+    background-color: #C9302C;
+    border-color: #C9302C;
+}
+
+.btn-danger:hover {
+    background-color: #D9534F;
+    border-color: #D9534F;
+}
+
+.btn-warning {
+    background-color: #F0AD4E;
+    border-color: #F0AD4E;
+}
+
+.btn-warning:hover {
+    background-color: #F7C24F;
+    border-color: #F7C24F;
+}
+
+.table {
+    background-color: #FFF;
+    color: #3C0A1D;
+}
+
+.table th, .table td {
+    border: 1px solid #DDD;
+}
+
+.table th {
+    background-color: #7B1F33;
+    color: #FFF;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #F7F7F7;
+}
