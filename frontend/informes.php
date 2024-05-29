@@ -13,20 +13,10 @@ $sql = "SELECT production.*, recipes.recipe_name FROM production
         ORDER BY production.production_date DESC";
 $result = $conn->query($sql);
 
-// Verificar si la consulta de producción tiene resultados
-if ($result === false) {
-    die('Error en la consulta de producción: ' . $conn->error);
-}
-
 // Obtener los detalles de los ingredientes de producción
 $sql_ingredients = "SELECT production_details.*, ingredients.ingredient_name FROM production_details
                     JOIN ingredients ON production_details.ingredient_name = ingredients.ingredient_name";
 $ingredients_result = $conn->query($sql_ingredients);
-
-// Verificar si la consulta de ingredientes tiene resultados
-if ($ingredients_result === false) {
-    die('Error en la consulta de ingredientes: ' . $conn->error);
-}
 
 // Crear un mapa de producción a ingredientes
 $production_ingredients = [];
@@ -37,6 +27,8 @@ while ($row = $ingredients_result->fetch_assoc()) {
     }
     $production_ingredients[$production_id][] = $row;
 }
+
+echo '<script>console.log("Mapa de ingredientes de producción:", ' . json_encode($production_ingredients) . ');</script>';
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +38,28 @@ while ($row = $ingredients_result->fetch_assoc()) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" href="images/cupcake.ico">
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printableArea, #printableArea * {
+                visibility: visible;
+            }
+            #printableArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+        .table-container {
+            margin: 20px;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -63,13 +77,14 @@ while ($row = $ingredients_result->fetch_assoc()) {
             <li class="nav-item"><a class="nav-link" href="entradas.php">Entradas</a></li>
             <li class="nav-item"><a class="nav-link" href="produccion.php">Producción</a></li>
             <li class="nav-item"><a class="nav-link" href="add_user.php">Usuarios</a></li>
-            <li class="nav-item"><a class="nav-link" href="informes.php">Informes</a></li>
+            <li class="nav-item"><a class="nav-link" href="informes.php">Listado Produccion</a></li>
+            <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
         </ul>
     </div>
 </nav>
 
-<div class="container mt-4">
-    <h2 class="mt-5">Listado de Producción</h2>
+<div class="container mt-4 no-print">
+    <h1 class="mt-5">Listado de Producción</h1>
 
     <!-- Barra de herramientas -->
     <div class="toolbar mb-3">
@@ -101,7 +116,9 @@ while ($row = $ingredients_result->fetch_assoc()) {
         </div>
         <button class="btn btn-primary" onclick="applyFilters()">Aplicar filtros</button>
     </div>
+</div>
 
+<div class="container mt-5 table-container" id="printableArea">
     <h3 class="mt-3">Productos Finales</h3>
     <?php
     $fecha_actual = null;
@@ -133,7 +150,7 @@ while ($row = $ingredients_result->fetch_assoc()) {
                         <button class="btn btn-info" onclick="toggleIngredients(<?= $producto['id'] ?>)">Ver Ingredientes</button>
                     </td>
                 </tr>
-                <tr id="ingredientes-<?= $producto['id'] ?>" style="display: none;">
+                <tr id="ingredientes-<?= $producto['id'] ?>">
                     <td colspan="5">
                         <ul class="list-group">
                             <?php if (isset($production_ingredients[$producto['id']])): ?>
@@ -157,11 +174,14 @@ while ($row = $ingredients_result->fetch_assoc()) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
 const production_ingredients = <?= json_encode($production_ingredients) ?>;
-console.log('production_ingredients:', production_ingredients);
+
+console.log('Mapa de ingredientes de producción:', production_ingredients);
 
 function toggleIngredients(productId) {
+    console.log('toggleIngredients called with productId:', productId);
     const ingredientesRow = document.getElementById('ingredientes-' + productId);
     if (ingredientesRow.style.display === 'none') {
+        console.log('Showing ingredients for productId:', productId);
         const ingredientes = production_ingredients[productId];
         if (ingredientes && ingredientes.length > 0) {
             let list = '';
@@ -215,14 +235,24 @@ function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    html2canvas(document.querySelector("#produccionTable")).then(canvas => {
+    // Mostrar todos los ingredientes
+    document.querySelectorAll('#produccionTable tbody tr[id^="ingredientes-"]').forEach(row => {
+        row.style.display = '';
+    });
+
+    html2canvas(document.querySelector("#printableArea")).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
         const imgProps = doc.getImageProperties(imgData);
-        const pdfWidth = doc.internal.pageSize.getWidth();
+        const pdfWidth = doc.internal.pageSize.getWidth() - 20; // Ajuste de margen
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-        doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        doc.addImage(imgData, 'PNG', 10, 10, pdfWidth, pdfHeight); // Ajuste de margen
         doc.save('produccion.pdf');
+    });
+
+    // Ocultar nuevamente los ingredientes después de generar el PDF
+    document.querySelectorAll('#produccionTable tbody tr[id^="ingredientes-"]').forEach(row => {
+        row.style.display = 'none';
     });
 }
 

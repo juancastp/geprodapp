@@ -6,11 +6,6 @@ if (!isset($_SESSION['username'])) {
 }
 $conn = new mysqli('localhost', 'saglu', 'W/qxFZpcDh4NIitn', 'geprodapp');
 
-// Manejar errores de conexión
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
 
@@ -21,28 +16,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
         foreach ($_POST['ingredients'] as $ingredient) {
             if (!empty($ingredient)) {
                 $ingredient = $conn->real_escape_string($ingredient);
-                $conn->query("INSERT INTO recipe_ingredients (recipe_id, ingredient_name) VALUES ('$recipe_id', '$ingredient')");
+                $conn->query("INSERT INTO ingredients (recipe_id, ingredient_name) VALUES ('$recipe_id', '$ingredient')");
             }
         }
         echo json_encode(['status' => 'success', 'message' => 'Receta añadida exitosamente']);
     } elseif ($action == 'delete_recipe') {
         $recipe_id = $_POST['recipe_id'];
-        $conn->query("DELETE FROM recipe_ingredients WHERE recipe_id='$recipe_id'");
+        $conn->query("DELETE FROM ingredients WHERE recipe_id='$recipe_id'");
         $conn->query("DELETE FROM recipes WHERE id='$recipe_id'");
         echo json_encode(['status' => 'success', 'message' => 'Receta eliminada exitosamente']);
     } elseif ($action == 'delete_ingredient') {
         $ingredient_id = $_POST['ingredient_id'];
-        $conn->query("DELETE FROM recipe_ingredients WHERE id='$ingredient_id'");
+        $conn->query("DELETE FROM ingredients WHERE id='$ingredient_id'");
         echo json_encode(['status' => 'success', 'message' => 'Ingrediente eliminado exitosamente']);
     } elseif ($action == 'update_ingredient') {
         $ingredient_id = $_POST['ingredient_id'];
         $ingredient_name = $conn->real_escape_string($_POST['ingredient_name']);
-        $conn->query("UPDATE recipe_ingredients SET ingredient_name='$ingredient_name' WHERE id='$ingredient_id'");
+        $conn->query("UPDATE ingredients SET ingredient_name='$ingredient_name' WHERE id='$ingredient_id'");
         echo json_encode(['status' => 'success', 'message' => 'Ingrediente actualizado exitosamente']);
     } elseif ($action == 'add_ingredient') {
         $recipe_id = $_POST['recipe_id'];
         $ingredient_name = $conn->real_escape_string($_POST['ingredient_name']);
-        $conn->query("INSERT INTO recipe_ingredients (recipe_id, ingredient_name) VALUES ('$recipe_id', '$ingredient_name')");
+        $conn->query("INSERT INTO ingredients (recipe_id, ingredient_name) VALUES ('$recipe_id', '$ingredient_name')");
         echo json_encode(['status' => 'success', 'message' => 'Ingrediente añadido exitosamente']);
     }
     exit();
@@ -63,7 +58,7 @@ $recipes = $conn->query("SELECT * FROM recipes");
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">
-            <img src="images/logo.png" width="50" height="50" alt="">
+            <img src="images/logo.png" width="30" height="30" alt="">
             Gluttire
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +71,7 @@ $recipes = $conn->query("SELECT * FROM recipes");
                 <li class="nav-item"><a class="nav-link" href="entradas.php">Entradas</a></li>
                 <li class="nav-item"><a class="nav-link" href="produccion.php">Producción</a></li>
                 <li class="nav-item"><a class="nav-link" href="add_user.php">Usuarios</a></li>
-                <li class="nav-item"><a class="nav-link" href="informes.php">Informes</a></li>
+                <li class="nav-item"><a class="nav-link" href="informes.php">Listado Produccion</a></li>
             </ul>
         </div>
     </nav>
@@ -94,7 +89,7 @@ $recipes = $conn->query("SELECT * FROM recipes");
                 <div class="form-group d-flex">
                     <input type="text" class="form-control" id="ingredient_1" name="ingredients[]" placeholder="Ingrediente 1">
                     <button type="button" class="btn btn-success ml-2" onclick="addNewIngredientField()">
-                        <i class="bi bi-plus-square-fill"></i>
+                    <b><i class="bi bi-plus-square"></i></b>
                     </button>
                 </div>
             </div>
@@ -110,7 +105,7 @@ $recipes = $conn->query("SELECT * FROM recipes");
                             <strong><?php echo $recipe['recipe_name']; ?></strong>
                             <div>
                                 <button class="btn btn-success btn-sm" onclick="addIngredient(<?php echo $recipe['id']; ?>)">
-                                    <i class="bi bi-plus-square-fill"></i>
+                                    <b><i class="bi bi-plus-square"></i></b>
                                 </button>
                                 <button class="btn btn-danger btn-sm" onclick="deleteRecipe(<?php echo $recipe['id']; ?>)">
                                     <i class="bi bi-trash3-fill"></i>
@@ -120,7 +115,7 @@ $recipes = $conn->query("SELECT * FROM recipes");
                         <ul class="list-group list-group-flush" id="ingredients-list-<?php echo $recipe['id']; ?>">
                             <?php
                             $recipe_id = $recipe['id'];
-                            $ingredients = $conn->query("SELECT * FROM recipe_ingredients WHERE recipe_id='$recipe_id'");
+                            $ingredients = $conn->query("SELECT * FROM ingredients WHERE recipe_id='$recipe_id'");
                             while ($ingredient = $ingredients->fetch_assoc()):
                             ?>
                                 <li class="list-group-item">
