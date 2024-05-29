@@ -1,0 +1,47 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+h1 {
+    color: #8B0000; /* Color corporativo */
+}
+
+.btn-success {
+    background-color: #8B0000; /* Color corporativo */
+    border-color: #8B0000; /* Color corporativo */
+}
+
+.btn-success:hover {
+    background-color: #A52A2A; /* Tonalidad más clara del color corporativo */
+    border-color: #A52A2A; /* Tonalidad más clara del color corporativo */
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.card-header strong {
+    color: #8B0000; /* Color corporativo */
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alert {
+    margin-top: 20px;
+}

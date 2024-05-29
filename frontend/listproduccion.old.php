@@ -29,29 +29,27 @@ include '../includes/header.php';
     </div>
 
     <!-- Filtros -->
-    <div class="filters mb-3 row">
-        <div class="form-group col-md-3">
+    <div class="filters mb-3">
+        <div class="form-group">
             <label for="startDate">Fecha inicio:</label>
             <input type="date" id="startDate" class="form-control">
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group">
             <label for="endDate">Fecha fin:</label>
             <input type="date" id="endDate" class="form-control">
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group">
             <label for="loteFilter">Lote de ingrediente:</label>
             <input type="text" id="loteFilter" class="form-control" placeholder="Ingrese lote de ingrediente">
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group">
             <label for="orderBy">Ordenar por fecha:</label>
             <select id="orderBy" class="form-control">
                 <option value="desc">Mayor a menor</option>
                 <option value="asc">Menor a mayor</option>
             </select>
         </div>
-        <div class="form-group col-md-12">
-            <button class="btn btn-primary" onclick="applyFilters()">Aplicar filtros</button>
-        </div>
+        <button class="btn btn-primary" onclick="applyFilters()">Aplicar filtros</button>
     </div>
 
     <h3 class="mt-3">Productos Finales</h3>
