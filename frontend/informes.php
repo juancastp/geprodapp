@@ -59,6 +59,10 @@ echo '<script>console.log("Mapa de ingredientes de producción:", ' . json_encod
         .table-container {
             margin: 20px;
         }
+        .centered {
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
@@ -77,7 +81,7 @@ echo '<script>console.log("Mapa de ingredientes de producción:", ' . json_encod
             <li class="nav-item"><a class="nav-link" href="entradas.php">Entradas</a></li>
             <li class="nav-item"><a class="nav-link" href="produccion.php">Producción</a></li>
             <li class="nav-item"><a class="nav-link" href="add_user.php">Usuarios</a></li>
-            <li class="nav-item"><a class="nav-link" href="informes.php">Listado Produccion</a></li>
+            <li class="nav-item"><a class="nav-link" href="informes.php">Listado Producción</a></li>
             <li class="nav-item"><a class="nav-link" href="logout.php">Logout</a></li>
         </ul>
     </div>
@@ -118,7 +122,7 @@ echo '<script>console.log("Mapa de ingredientes de producción:", ' . json_encod
     </div>
 </div>
 
-<div class="container mt-5 table-container" id="printableArea">
+<div class="container mt-5 table-container centered" id="printableArea">
     <h3 class="mt-3">Productos Finales</h3>
     <?php
     $fecha_actual = null;
@@ -235,9 +239,11 @@ function downloadPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Mostrar todos los ingredientes
-    document.querySelectorAll('#produccionTable tbody tr[id^="ingredientes-"]').forEach(row => {
-        row.style.display = '';
+    // Mostrar todos los ingredientes antes de generar el PDF
+    document.querySelectorAll('#produccionTable tbody tr').forEach(row => {
+        if (row.id.startsWith('ingredientes-')) {
+            row.style.display = '';
+        }
     });
 
     html2canvas(document.querySelector("#printableArea")).then(canvas => {
@@ -248,11 +254,13 @@ function downloadPDF() {
 
         doc.addImage(imgData, 'PNG', 10, 10, pdfWidth, pdfHeight); // Ajuste de margen
         doc.save('produccion.pdf');
-    });
 
-    // Ocultar nuevamente los ingredientes después de generar el PDF
-    document.querySelectorAll('#produccionTable tbody tr[id^="ingredientes-"]').forEach(row => {
-        row.style.display = 'none';
+        // Ocultar nuevamente los ingredientes
+        document.querySelectorAll('#produccionTable tbody tr').forEach(row => {
+            if (row.id.startsWith('ingredientes-')) {
+                row.style.display = 'none';
+            }
+        });
     });
 }
 

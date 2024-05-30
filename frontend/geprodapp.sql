@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-05-2024 a las 17:05:15
+-- Tiempo de generación: 30-05-2024 a las 00:30:52
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -44,7 +44,8 @@ CREATE TABLE `entries` (
 CREATE TABLE `ingredients` (
   `id` int(11) NOT NULL,
   `recipe_id` int(11) DEFAULT NULL,
-  `ingredient_name` varchar(255) NOT NULL
+  `ingredient_name` varchar(255) NOT NULL,
+  `ingredient_lot` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -57,7 +58,9 @@ CREATE TABLE `production` (
   `id` int(11) NOT NULL,
   `product_name` varchar(255) NOT NULL,
   `production_lot` varchar(50) NOT NULL,
-  `production_date` date NOT NULL
+  `production_date` date NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -146,7 +149,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `full_name`, `username`, `password`) VALUES
-(1, 'Juan Carlos Romero', 'juanca', '71cb6765f9b0ac5c805977adea876333');
+(1, 'Juan Carlos Romero', 'juanca', '71cb6765f9b0ac5c805977adea876333'),
+(2, 'Raquel Romero', 'raquel', '71cb6765f9b0ac5c805977adea876333');
 
 --
 -- Índices para tablas volcadas
@@ -267,7 +271,7 @@ ALTER TABLE `recipe_ingredients`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
