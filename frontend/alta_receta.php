@@ -4,7 +4,8 @@ if (!isset($_SESSION['username'])) {
     header('Location: login.php');
     exit();
 }
-$conn = new mysqli('localhost', 'saglu', 'W/qxFZpcDh4NIitn', 'geprodapp');
+
+include 'includes/db_config.php'; 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
     $action = $_POST['action'];
@@ -48,33 +49,13 @@ $recipes = $conn->query("SELECT * FROM recipes");
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Alta Recetas</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="icon" href="images/cupcake.ico">
-</head>
+<?php 
+include 'includes/header.php'; 
+?>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-            <img src="images/logo.png" width="30" height="30" alt="">
-            Gluttire
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="alta_receta.php">Alta Recetas</a></li>
-                <li class="nav-item"><a class="nav-link" href="entradas.php">Entradas</a></li>
-                <li class="nav-item"><a class="nav-link" href="produccion.php">Producción</a></li>
-                <li class="nav-item"><a class="nav-link" href="add_user.php">Usuarios</a></li>
-                <li class="nav-item"><a class="nav-link" href="informes.php">Listado Produccion</a></li>
-            </ul>
-        </div>
-    </nav>
+<?php 
+include 'includes/nav.php'; 
+?>
 
     <div class="container mt-4">
         <h1 class="mb-4">Alta de Recetas</h1>

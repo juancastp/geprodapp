@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (isset($_POST['username']) && isset($_POST['password'])) {
-    $conn = new mysqli('localhost', 'saglu', 'W/qxFZpcDh4NIitn', 'geprodapp');
+    include 'includes/db_config.php'; 
     $username = $conn->real_escape_string($_POST['username']);
     $password = md5($conn->real_escape_string($_POST['password']));
     $result = $conn->query("SELECT * FROM users WHERE username='$username' AND password='$password'");
