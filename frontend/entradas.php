@@ -94,82 +94,8 @@ require 'includes/nav.php';
     </form>
 </div>
 
-<script>
-function addMaterialField() {
-    const materialsDiv = document.getElementById('materials');
-    const count = materialsDiv.getElementsByClassName('form-group').length;
-    const newDiv = document.createElement('div');
-    newDiv.classList.add('form-group');
-    newDiv.innerHTML = `<label>Artículo ${count + 1}:</label>
-                        <div class="form-row">
-                            <div class="form-group col-md-3">
-                                <input type="text" class="form-control" name="materials[${count}][name]" placeholder="Material" required>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <input type="number" step="any" class="form-control" name="materials[${count}][weight]" placeholder="Peso" required>
-                            </div>
-                            <div class="form-group col-md-1">
-                                <input type="number" step="any" class="form-control" name="materials[${count}][quantity]" placeholder="Cantidad" required>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <input type="text" class="form-control" name="materials[${count}][lot]" placeholder="Lote" required>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <input id="demasart" type="date" class="form-control" name="materials[${count}][fec_cad]" placeholder="Fecha de cad." required>
-                            </div>
-                            <div class="form-group col-md-1 d-flex align-items-end">
-                                <button type="button" class="btn btn-success" onclick="addMaterialField()">
-                                    <i class="bi bi-plus-square-fill"></i>
-                                </button>
-                            </div>
-                            <div class="form-group col-md-1 d-flex align-items-end">
-                                <button type="button" class="btn btn-danger" onclick="removeMaterialField(this)">
-                                    <i class="bi bi-dash-square-fill"></i>
-                                </button>
-                            </div>
-                        </div>`;
-    materialsDiv.appendChild(newDiv);
-    updateAddButtons();
-}
-
-function removeMaterialField(button) {
-    console.log('Botón de eliminar presionado');
-    const formRow = button.closest('.form-row');
-    console.log('Elemento formRow encontrado:', formRow);
-    if (formRow) {
-        formRow.parentElement.remove();
-        console.log('formRow eliminado');
-    } else {
-        console.log('formRow no encontrado');
-    }
-    updateAddButtons();
-}
-
-function updateAddButtons() {
-    const materialsDiv = document.getElementById('materials');
-    const addButtons = materialsDiv.querySelectorAll('button.btn-success');
-    addButtons.forEach((button, index) => {
-        button.style.display = (index === addButtons.length - 1) ? 'block' : 'none';
-    });
-}
-
-document.getElementById('entry-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const formData = new FormData(this);
-    formData.append('action', 'add_entry');
-    fetch('entradas.php', {
-        method: 'POST',
-        body: formData
-    }).then(response => response.json())
-      .then(data => {
-          if (data.status === 'success') {
-              alert(data.message);
-              location.reload();
-          } else {
-              alert('Error al añadir la entrada');
-          }
-      });
-});
-</script>
+<?php
+include 'includes/footer.php';
+?>
 </body>
 </html>

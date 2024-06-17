@@ -7,10 +7,10 @@ if (!isset($_SESSION['username'])) {
 }
 
 require 'includes/db_config.php';
-
 require 'includes/nav.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['action'])) {
+    $action = $_POST['action']; // Añadir esta línea para capturar la acción correctamente
     if ($action == 'update_material') {
         $material_id = $_POST['material_id'];
         $name = $conn->real_escape_string($_POST['name']);
@@ -29,34 +29,7 @@ $entries = $conn->query("SELECT * FROM entries");
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Listado de Entradas</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="icon" href="images/cupcake.ico">
-    <style>
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #printableArea, #printableArea * {
-                visibility: visible;
-            }
-            #printableArea {
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
-            .no-print {
-                display: none;
-            }
-        }
-        .table-container {
-            margin: 20px;
-        }
-    </style>
-</head>
+<?php include 'includes/header.php'; ?>
 <body>
 <div class="container mt-4 no-print">
     <h1 class="mt-5">Listado de Entradas</h1>
@@ -68,7 +41,7 @@ $entries = $conn->query("SELECT * FROM entries");
     </div>
 
     <!-- Filtros -->
-    <div class="filters mb-3">
+    <div id="filters" class="filters mb-3">
         <div class="form-group">
             <label for="startDate">Fecha inicio:</label>
             <input type="date" id="startDate" class="form-control">
@@ -93,13 +66,13 @@ $entries = $conn->query("SELECT * FROM entries");
             <label for="cadDateFilter">Fecha de caducidad:</label>
             <input type="date" id="cadDateFilter" class="form-control">
         </div>
-        <button class="btn btn-primary" onclick="applyFilters()">Aplicar filtros</button>
+        <button class="btn btn-primary align-self-end" onclick="applyFilters()">Aplicar filtros</button>
     </div>
 </div>
 
 <div class="container mt-5 table-container" id="printableArea">
     <h3 class="mt-3">Entradas</h3>
-    <table id="entriesTable" class="table table-bordered">
+    <table id="entriesTable" class="table table-bordered centered">
         <thead>
             <tr>
                 <th class="bg-primary text-white">Proveedor</th>
@@ -141,8 +114,8 @@ $entries = $conn->query("SELECT * FROM entries");
     </table>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<?php include 'includes/footer.php'; ?>
+
 <script>
 function toggleMaterials(entryId) {
     const materialesRow = document.getElementById('materiales-' + entryId);
@@ -314,5 +287,6 @@ function saveMaterial(materialId) {
       });
 }
 </script>
+
 </body>
 </html>

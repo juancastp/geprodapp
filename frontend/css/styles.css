@@ -14,8 +14,18 @@
         display: none;
     }
 }
+
 .table-container {
-    margin: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+}
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.filters .form-group {
+    flex: 1;
 }
 .centered {
     margin-left: auto;

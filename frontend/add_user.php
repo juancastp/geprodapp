@@ -4,7 +4,7 @@ if (!isset($_SESSION['username'])) {
     header('Location: login.php');
     exit();
 }
-$conn = new mysqli('localhost', 'saglu', 'W/qxFZpcDh4NIitn', 'geprodapp');
+include 'includes/db_config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $full_name = $conn->real_escape_string($_POST['full_name']);
     $username = $conn->real_escape_string($_POST['username']);
@@ -16,28 +16,13 @@ $users = $conn->query("SELECT * FROM users");
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Usuarios</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
+<?php
+include 'includes/header.php';
+?>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">
-            <img src="images/logo.png" width="30" height="30" alt="">
-            Gluttire
-        </a>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="index.php">Inicio</a></li>
-                <li class="nav-item"><a class="nav-link" href="alta_receta.php">Alta Recetas</a></li>
-                <li class="nav-item"><a class="nav-link" href="entradas.php">Entradas</a></li>
-                <li class="nav-item"><a class="nav-link" href="produccion.php">Producción</a></li>
-                <li class="nav-item"><a class="nav-link" href="add_user.php">Usuarios</a></li>
-                <li class="nav-item"><a class="nav-link" href="informes.php">Informes</a></li>
-            </ul>
-        </div>
-    </nav>
-
+    <?php
+    include 'includes/nav.php';
+    ?>
     <div class="container">
         <h1>Usuarios</h1>
         <form method="post">
@@ -79,5 +64,8 @@ $users = $conn->query("SELECT * FROM users");
             </tbody>
         </table>
     </div>
+    <?php
+    include 'includes/footer.php';
+    ?>
 </body>
 </html>
