@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-05-2024 a las 00:30:52
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Tiempo de generación: 17-06-2024 a las 07:18:40
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -87,8 +87,9 @@ CREATE TABLE `raw_materials` (
   `entry_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `weight` decimal(10,2) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `lot` varchar(255) NOT NULL
+  `quantity` decimal(10,2) NOT NULL,
+  `lot` varchar(255) NOT NULL,
+  `fec_cad` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -150,7 +151,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `full_name`, `username`, `password`) VALUES
 (1, 'Juan Carlos Romero', 'juanca', '71cb6765f9b0ac5c805977adea876333'),
-(2, 'Raquel Romero', 'raquel', '71cb6765f9b0ac5c805977adea876333');
+(2, 'Raquel Romero', 'raquel', '71cb6765f9b0ac5c805977adea876333'),
+(3, 'Gluttire Pastelería Creativa', 'Gluttire', 'aaea3ababfe7490e6c1ba6eccab9530b');
 
 --
 -- Índices para tablas volcadas
@@ -271,7 +273,7 @@ ALTER TABLE `recipe_ingredients`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
